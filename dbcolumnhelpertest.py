@@ -38,3 +38,4 @@ class TestDBColumnHelper(unittest.TestCase):
     rtn = dbcolumnhelper.Parse(["Phrase1; Phrase2"])
     self.assertEqual(rtn[0].Phrase, "Phrase1")
     self.assertEqual(rtn[1].Phrase, "Phrase2")
+

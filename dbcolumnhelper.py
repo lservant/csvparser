@@ -1,3 +1,18 @@
+import csv
+
+def ImportCSV(csvPath):
+    inList = []
+    with open(csvPath, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            # print(row["farming_practicesList"])
+            inList.append(row['farming_practicesList'])
+    
+    parsedList = Parse(inList)
+    for item in parsedList:
+        print(item)
+
+
 def Parse(input):
     if input == [""]:
         return [ParseResult("", 0)]
@@ -34,3 +49,6 @@ class ParseResult():
     def __init__(self, phrase, count):
         self.Phrase = phrase
         self.Count = count
+
+    def __str__(self):
+        return self.Phrase + ": " + str(self.Count)
