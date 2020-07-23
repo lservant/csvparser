@@ -21,21 +21,26 @@ def Parse(input):
     items = [""]
 
     for item in input:
-
-        if ";" in item:
-            items = item.split("; ")
-            for phrase in items:
-                prertn = PhraseAddOrInit(prertn, phrase)
-        else:
-            prertn = PhraseAddOrInit(prertn, item)
+        item = item.title()
+        items = item.split(";")
+        itemsToAdd = {}
+        for phrase in items:
+            phrase = phrase.strip()
+            if phrase not in itemsToAdd:
+                itemsToAdd[phrase] = 1
+        for phrase in itemsToAdd:
+            prertn = PhraseAddOrInit(prertn, phrase)
 
     rtn = []
 
     for key in prertn:
         rtn.append(ParseResult(key, prertn[key]))
 
+    rtn.sort(reverse=True, key=sortFunction)
     return rtn
 
+def sortFunction(item):
+    return item.Count
 
 def PhraseAddOrInit(prertn, phrase):
     if phrase in prertn:

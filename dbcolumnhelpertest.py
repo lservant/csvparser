@@ -39,3 +39,33 @@ class TestDBColumnHelper(unittest.TestCase):
     self.assertEqual(rtn[0].Phrase, "Phrase1")
     self.assertEqual(rtn[1].Phrase, "Phrase2")
 
+  def test_stringsCaseInsensitive(self):
+    rtn = dbcolumnhelper.Parse(["Phrase1", "phrase1"])
+    self.assertEqual(rtn[0].Phrase, "Phrase1")
+    self.assertEqual(rtn[0].Count, 2)
+
+  def test_stringsCaseInsensitiveMuliplePhrases(self):
+    rtn = dbcolumnhelper.Parse(["Phrase1; phrase2", "phrase1; Phrase2"])
+    self.assertEqual(rtn[0].Phrase, "Phrase1")
+    self.assertEqual(rtn[0].Count, 2)
+    self.assertEqual(rtn[1].Phrase, "Phrase2")
+    self.assertEqual(rtn[1].Count, 2)
+
+  def test_trimsWhitespaceAroundPhrases(self):
+    rtn = dbcolumnhelper.Parse(["  Phrase1 ; Phrase2     "])
+    self.assertEqual(rtn[0].Phrase, "Phrase1")
+    self.assertEqual(rtn[0].Count, 1)
+    self.assertEqual(rtn[1].Phrase, "Phrase2")
+    self.assertEqual(rtn[1].Count, 1)
+
+  def test_displaysDataFromGreatestCountToLeast(self):
+    rtn = dbcolumnhelper.Parse(["Phrase1; Phrase2", "Phrase2"])
+    self.assertEqual(rtn[0].Phrase, "Phrase2")
+    self.assertEqual(rtn[0].Count, 2)
+    self.assertEqual(rtn[1].Phrase, "Phrase1")
+    self.assertEqual(rtn[1].Count, 1)
+
+  def test_countsPhraseInRowOnlyOnce(self):
+    rtn = dbcolumnhelper.Parse(["Phrase1; Phrase1", "Phrase1"])
+    self.assertEqual(rtn[0].Phrase, "Phrase1")
+    self.assertEqual(rtn[0].Count, 2)
